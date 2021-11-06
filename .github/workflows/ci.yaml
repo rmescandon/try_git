@@ -22,6 +22,7 @@ jobs:
           # create candidate branch based on pulled
           export CANDIDATE="$(< /dev/urandom tr -dc A-Za-z0-9 | head -c12)"
           git checkout -b ${CANDIDATE}
+          git fetch origin
           git checkout master
           git merge --no-ff ${CANDIDATE}
       - name: Run checks
