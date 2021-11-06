@@ -17,6 +17,15 @@ jobs:
         shell: bash
         run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
         id: candidate
+      - name: Git
+        run: |
+          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+          git --version
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+          git status
+          git tag
+          git describe
       - name: Merge candidate into master
         run: |
           echo running on branch ${GITHUB_REF##*/}
