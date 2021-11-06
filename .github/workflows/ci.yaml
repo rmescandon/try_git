@@ -15,13 +15,14 @@ jobs:
         with:
           ref: master
         if: github.event.review.state == 'approved'
-run: |
-echo "APPROVED" 
       - name: Branch name
+        if: github.event.review.state == 'approved'
         run: echo running on branch ${GITHUB_REF##*/}
       # Merge candidate branch to test into master 
       - name: Merge candidate into master
+        if: github.event.review.state == 'approved'
         run: |
           git merge --no-ff ${{ github.ref }}
       - name: Run checks
+        if: github.event.review.state == 'approved'
         run: ./scripts/run-checks.sh
