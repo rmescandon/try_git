@@ -22,7 +22,8 @@ jobs:
           # create candidate branch based on pulled
           export CANDIDATE="$(< /dev/urandom tr -dc A-Za-z0-9 | head -c12)"
           git checkout -b ${CANDIDATE}
-          git fetch origin
+          # Adding unshallow to pevent git raise unrelated storied error, because of checkout of depth 1
+          git fetch origin --unshallow
           git checkout master
           git merge --no-ff ${CANDIDATE}
       - name: Run checks
