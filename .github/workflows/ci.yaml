@@ -16,7 +16,8 @@ jobs:
       - name: Merge candidate into master
         run: |
           # echo number of reviewers:
-          Reviewers: ${{ github.event.pull_request.requested_reviewers }}
+          echo '${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq '. | length'
+          
           # create candidate branch based on pulled
           export CANDIDATE="$(< /dev/urandom tr -dc A-Za-z0-9 | head -c12)"
           git checkout -b ${CANDIDATE}
