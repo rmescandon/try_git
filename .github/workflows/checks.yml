@@ -1,0 +1,14 @@
+name: checks
+on: [push]
+
+jobs:
+  build:
+    # The job runs on default machine
+    runs-on: self-hosted
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout this repo
+        uses: actions/checkout@v2
+      # Run the checks
+      - name: Run tests on their own docker container
+        run: ./scripts/run-checks.sh
