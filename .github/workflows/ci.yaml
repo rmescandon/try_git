@@ -8,7 +8,6 @@ jobs:
   build:
     # The job runs on default machine
     runs-on: self-hosted
-    env:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout this repo branch
