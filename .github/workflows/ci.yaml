@@ -8,21 +8,22 @@ jobs:
   build:
     # The job runs on default machine
     runs-on: self-hosted
+    env:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout this repo branch
         uses: actions/checkout@v2
         if: github.event.review.state == 'approved'
-      - name: Get the candidate branch name
-        shell: bash
-        run: echo "::set-output name=branch::${GITHUB_REF#refs/heads/}"
-        id: candidate
+      # - name: Get the candidate branch name
+      #   shell: bash
+      #   run: echo "::set-output name=branch::${github.ref#refs/heads/}"
+      #   id: candidate
       - name: Merge candidate into master
         run: |
-          echo value for GITHUB_REF ${GITHUB_REF}
-          echo running on branch ${GITHUB_REF##*/}
+          # create candidate branch based on pulled
+          export CANDIDATE="$(< /dev/urandom tr -dc A-Za-z0-9 | head -c12)"
+          git checkout -b ${CANDIDATE}
           git checkout master
-          echo running on branch ${GITHUB_REF##*/}
-          git merge --no-ff ${{ steps.candidate.outputs.branch }}
+          git merge --no-ff ${CANDIDATE}
       - name: Run checks
         run: ./scripts/run-checks.sh
