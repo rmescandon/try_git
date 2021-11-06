@@ -1,0 +1,31 @@
+name: CI
+on:
+  pull_request_review:
+    types: [submitted]
+    # branches: ['master']
+
+jobs:
+  build:
+    # The job runs on default machine
+    runs-on: self-hosted
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout this repo on master branch
+        uses: actions/checkout@v2
+        with:
+          ref: master
+        if: github.event.review.state == 'approved'
+      - name: Branch name
+        if: github.event.review.state == 'approved'
+        run: |
+          echo running on branch ${GITHUB_REF##*/}
+          echo github head ref ${{ github.head_ref }}
+          echo github base ref ${{ github.base_ref }}
+      # Merge candidate branch to test into master 
+      - name: Merge candidate into master
+        if: github.event.review.state == 'approved'
+        run: |
+          git merge --no-ff ${{ github.ref }}
+      - name: Run checks
+        if: github.event.review.state == 'approved'
+        run: ./scripts/run-checks.sh
