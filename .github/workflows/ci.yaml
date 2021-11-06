@@ -1,0 +1,21 @@
+name: checks
+on: [push]
+
+jobs:
+  build:
+    # The job runs on default machine
+    runs-on: self-hosted
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout this repo on master branch
+        uses: actions/checkout@v2
+        with:
+          ref: master
+      - name: Branch name
+        run: echo running on branch ${GITHUB_REF##*/}
+      # Merge candidate branch to test into master 
+      - name: Merge candidate into master
+        run: |
+          git merge --no-ff ${{ github.ref }}
+      - name: Run checks
+        run: ./scripts/run-checks.sh

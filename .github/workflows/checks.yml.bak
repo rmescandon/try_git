@@ -10,5 +10,5 @@ jobs:
       - name: Checkout this repo
         uses: actions/checkout@v2
       # Run the checks
-      - name: Run tests on their own docker container
+      - name: Run checks
         run: ./scripts/run-checks.sh
