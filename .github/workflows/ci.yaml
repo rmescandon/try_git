@@ -16,10 +16,10 @@ jobs:
       - name: Merge candidate into master
         run: |
           # echo number of reviewers:
-          echo '${{ toJson(github.event.pull_request.requested_reviewers) }}' | jq '. | length'
-          
+          echo "${{ github.event.pull_request }}"
+
           # create candidate branch based on pulled
-          export CANDIDATE="$(< /dev/urandom tr -dc A-Za-z0-9 | head -c12)"
+          export CANDIDATE="$(echo $RANDOM | md5sum | head -c 20; echo;)"
           git checkout -b ${CANDIDATE}
           # Adding unshallow to pevent git raise unrelated storied error, because of checkout of depth 1
           git fetch origin --unshallow
