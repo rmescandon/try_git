@@ -1,21 +1,29 @@
-name: checks
-on: [push]
+name: CI
+on:
+  pull_request_review:
+    types: [submitted]
+    branches: [master]
 
 jobs:
   build:
     # The job runs on default machine
     runs-on: self-hosted
+    env:
+      TARGET_BRANCH: master
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - name: Checkout this repo on master branch
+      - name: Checkout this repo branch
         uses: actions/checkout@v2
-        with:
-          ref: master
-      - name: Branch name
-        run: echo running on branch ${GITHUB_REF##*/}
-      # Merge candidate branch to test into master 
-      - name: Merge candidate into master
+        if: github.event.review.state == 'approved'
+      - name: Merge candidate into target branch
         run: |
-          git merge --no-ff ${{ github.ref }}
+          # create candidate branch based on pulled
+          export CANDIDATE_BRANCH="$(echo $RANDOM | md5sum | head -c 20; echo;)"
+          git checkout -b ${CANDIDATE_BRANCH}
+          # Adding unshallow to pevent git raise unrelated storied error, because of checkout of depth 1
+          git fetch origin --unshallow
+          git checkout ${TARGET_BRANCH}
+          git pull
+          git merge --no-ff ${CANDIDATE_BRANCH}
       - name: Run checks
         run: ./scripts/run-checks.sh
