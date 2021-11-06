@@ -15,7 +15,7 @@ jobs:
       - name: Checkout this repo branch
         uses: actions/checkout@v2
         if: github.event.review.state == 'approved'
-      - name: Merge candidate into ${TARGET_BRANCH}
+      - name: Merge candidate into target branch
         run: |
           # create candidate branch based on pulled
           export CANDIDATE_BRANCH="$(echo $RANDOM | md5sum | head -c 20; echo;)"
