@@ -17,6 +17,7 @@ jobs:
         if: github.event.review.state == 'approved'
       - name: See the different variables
         run: |
+          echo "ENV: ${{ github.env }}"
           echo "EVENT NAME: ${{ github.event_name }}"
           echo "EVENT_PATH: ${{ github.event_path }}"
           echo "HEAD_REF: ${{ github.head_ref }}"
@@ -28,4 +29,4 @@ jobs:
           echo "RUN ID: ${{ github.run_id}}"
           echo "RUN NUMBER: ${{ github.run_number }}"
           echo "RUN ATTEMPT: ${{ github.run_attempt }}"
-         
+          echo "JOB ID OUTPUTS: ${{ jobs.4520111208.outputs }}"         
