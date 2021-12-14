@@ -29,4 +29,3 @@ jobs:
           echo "RUN ID: ${{ github.run_id}}"
           echo "RUN NUMBER: ${{ github.run_number }}"
           echo "RUN ATTEMPT: ${{ github.run_attempt }}"
-          echo "JOB ID OUTPUTS: ${{ github.jobs.4520111208.outputs }}"
