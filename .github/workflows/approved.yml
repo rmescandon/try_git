@@ -17,6 +17,6 @@ jobs:
         if: github.event.review.state == 'approved'
       - name: See the different variables
         run: |
-          echo "JOB STATUS: {{ job.status }}"
-          echo "EVENT: {{ github.event }}"
+          echo "JOB STATUS: ${{ job.status }}"
+          echo "EVENT: ${{ github.event }}"
          
