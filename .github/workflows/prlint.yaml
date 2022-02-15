@@ -1,0 +1,27 @@
+name: prlint
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+    branches: [master]
+
+jobs:
+  build:
+    # The job runs on default machine
+    runs-on: self-hosted
+    env:
+      TARGET_BRANCH: master
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout this repo branch
+        uses: actions/checkout@v2
+      - name: Checkout robertomier/prlint repo
+        uses: actions/checkout@v2
+        with:
+          repository: robertomier/prlint
+          token: ${{ secrets.CHECKOUT_TOKEN }}
+          path: .github/actions
+      - name: Pull request lint
+        uses: ./.github/actions
+        with:
+          github_token: ${{ github.token }}
