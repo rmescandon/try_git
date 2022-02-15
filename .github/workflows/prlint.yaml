@@ -23,5 +23,3 @@ jobs:
           path: .github/actions
       - name: Pull request lint
         uses: ./.github/actions
-        with:
-          github_token: ${{ github.token }}
