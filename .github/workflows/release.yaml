@@ -12,7 +12,7 @@ on:
         - major
 
   workflow_run:
-    workflows: [checks]
+    workflows: [integration]
     type:
       - completed
 
