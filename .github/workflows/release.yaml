@@ -1,0 +1,62 @@
+name: release
+on:
+  workflow_dispatch:
+    branches: [master]
+    inputs:
+      bump_type:
+        type: choice
+        description: The type of version increment
+        options: 
+        - revision
+        - minor
+        - major
+
+  workflow_run:
+    workflows: [checks]
+    type:
+      - completed
+
+jobs:
+  build:
+    # The job runs on default novum machine
+    runs-on: self-hosted-novum
+
+    # Run only if integration was success or on demand
+    if: ${{ github.event.workflow_run == null || github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - if: ${{ inputs.bump_type == '' }}
+        name: calculate the bump version, when not set as input, based on last pr labels
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -eou pipefail
+
+          bump_type="revision"
+
+          # $1 pr number
+          # $2 label
+          pr_has_label() {
+            local pr_number
+            local label
+            pr_number="$1"
+            label="$2"
+            if gh pr view "$pr_number" --json labels -q '.labels[].name' | grep "$label" > /dev/null 2>&1; then 
+              return 0
+            fi
+            return 1
+          }
+
+          pr_number="$(git log -1 --oneline --merges | sed -n "s/^.*Merge pull request #\\s*\\([0-9]*\\).*$/\\1/p")"
+
+          if pr_has_label "$pr_number" "minor release"; then
+            bump_type="minor"
+          fi
+
+          if pr_has_label "$pr_number" "major release"; then
+            bump_type="major"
+          fi
+
+      - name: Echo the value of inputs.bump_type
+        run: |
+          echo "inputs bump_type: "${{ inputs.bump_type }}
