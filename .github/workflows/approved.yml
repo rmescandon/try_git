@@ -1,0 +1,31 @@
+name: on-approved
+on:
+  pull_request_review:
+    types: [submitted]
+    branches: [master]
+
+jobs:
+  build:
+    # The job runs on default machine
+    runs-on: self-hosted
+    env:
+      TARGET_BRANCH: master
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout this repo branch
+        uses: actions/checkout@v2
+        if: github.event.review.state == 'approved'
+      - name: See the different variables
+        run: |
+          echo "ENV: ${{ github.env }}"
+          echo "EVENT NAME: ${{ github.event_name }}"
+          echo "EVENT_PATH: ${{ github.event_path }}"
+          echo "HEAD_REF: ${{ github.head_ref }}"
+          echo "BASE_REF: ${{ github.base_ref }}"
+          echo "WORKFLOW: ${{ github.workflow }}"
+          echo "JOB STATUS: ${{ job.status }}"
+          echo "EVENT: ${{ github.event }}"
+          echo "JOB: ${{ github.job }}"
+          echo "RUN ID: ${{ github.run_id}}"
+          echo "RUN NUMBER: ${{ github.run_number }}"
+          echo "RUN ATTEMPT: ${{ github.run_attempt }}"
