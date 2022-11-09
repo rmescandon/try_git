@@ -19,7 +19,7 @@ on:
 jobs:
   build:
     # The job runs on default novum machine
-    runs-on: self-hosted-novum
+    runs-on: self-hosted
 
     # Run only if integration was success or on demand
     if: ${{ github.event.workflow_run == null || github.event.workflow_run.conclusion == 'success' }}
