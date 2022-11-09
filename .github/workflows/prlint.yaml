@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: robertomier/prlint
-          token: ${{ secrets.CHECKOUT_TOKEN }}
+          # token: ${{ secrets.CHECKOUT_TOKEN }}
           path: .github/actions
       - name: Pull request lint
         uses: ./.github/actions
