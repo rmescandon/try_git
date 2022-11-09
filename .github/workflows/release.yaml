@@ -25,6 +25,8 @@ jobs:
     if: ${{ github.event.workflow_run == null || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
+      - name: Checkout this repo
+        uses: actions/checkout@v2
       - if: ${{ inputs.bump_type == '' }}
         name: calculate the bump version, when not set as input, based on last pr labels
         env:
