@@ -1,0 +1,13 @@
+name: integration
+on:
+  pull_request:
+    branches: [main]
+    types: [closed]
+
+jobs:
+  build:
+    # The job runs on default novum machine
+    runs-on: self-hosted
+    steps:
+      - name: Dummy Integration
+        run: echo "Integration OK!!"
