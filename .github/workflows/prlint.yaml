@@ -1,4 +1,4 @@
-name: Valid Title Format
+name: Validate PR title format
 
 on:
   pull_request:
