@@ -15,11 +15,18 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout this repo branch
         uses: actions/checkout@v2
-      - name: Checkout robertomier/prlint repo
-        uses: actions/checkout@v2
-        with:
-          repository: robertomier/prlint
-          token: ${{ secrets.CHECKOUT_TOKEN }}
-          path: .github/actions
-      - name: Pull request lint
-        uses: ./.github/actions
+
+      - name: Lint Title
+        run: |
+          echo "TITLE: ${{github.event.pull_request.title }}"
+
+          [[ ${{github.event.pull_request.title }} =~ ^NOV-\d{6}:.*$ ]] && echo matched
+
+      # - name: Checkout robertomier/prlint repo
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: robertomier/prlint
+      #     token: ${{ secrets.CHECKOUT_TOKEN }}
+      #     path: .github/actions
+      # - name: Pull request lint
+      #   uses: ./.github/actions
