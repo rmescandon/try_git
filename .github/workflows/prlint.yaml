@@ -18,9 +18,7 @@ jobs:
 
       - name: Lint Title
         run: |
-          echo "TITLE: ${{github.event.pull_request.title }}"
-
-          if [[ ${{github.event.pull_request.title }} =~ ^NOV-\d{6}:.*$ ]] then
+          if [[ "${{github.event.pull_request.title }}" =~ ^NOV-\d{6}:.*$ ]]; then
             echo "matched!!"
           else
             echo "does not match"
