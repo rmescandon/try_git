@@ -34,15 +34,14 @@ jobs:
       - name: Checkout this repo
         uses: actions/checkout@v2
       - if: ${{ inputs.bump_type == '' }}
+        id: semver
         name: calculate the bump version, when not set as input, based on last pr labels
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          #/bin/bash 
-
           set -eou pipefail
 
-          BUMP="revision"
+          bump="revision"
 
           # searches for a certain label in the pr which landed a commit
           # $1 commit
@@ -62,13 +61,16 @@ jobs:
           last_commit="$(git log -1 --oneline | cut -d ' ' -f1 | xargs)"
 
           if commit_pr_has_label "$last_commit" "feature"; then
-            BUMP="minor"
+            bump="minor"
           fi
 
           if commit_pr_has_label "$last_commit" "not backwards compatible"; then
-            BUMP="major"
+            bump="major"
           fi
+
+          echo ::set-output name=bump_type::${bump}
 
       - name: Echo the value of inputs.bump_type
         run: |
-          echo "inputs bump_type: "${{ inputs.bump_type }}
+          echo "the input bump type: "${{ inputs.bump_type }}
+          echo "the calculated bump_type: "${{ steps.semver.outputs.bump_type }}
