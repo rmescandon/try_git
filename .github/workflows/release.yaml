@@ -39,8 +39,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set -eou pipefail
-
           bump="revision"
 
           # searches for a certain label in the pr which landed a commit
