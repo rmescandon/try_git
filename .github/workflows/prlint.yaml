@@ -18,7 +18,7 @@ jobs:
 
       - name: Lint Title
         run: |
-          if [[ "${{github.event.pull_request.title }}" =~ ^NOV-\d{6}:.*$ ]]; then
+          if [[ "${{github.event.pull_request.title }}" =~ ^NOV-[0-9]{6}: ]]; then
             echo "Title format is ok"
           else
             echo "Title does not have the proper format"
