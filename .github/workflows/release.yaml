@@ -1,4 +1,10 @@
 name: release
+
+### VER
+#
+# gh pr list -s merged -B main -S be549926d92658f0aa5c5bf432e569b680926104 --json labels
+#
+# gh pr list -s merged -B master -S 3d972ded79ed8907a7ebe6ca0472ee48502d85dd --json labels -q '.[].labels[].name'
 on:
   workflow_dispatch:
     branches: [master]
@@ -32,31 +38,35 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          #/bin/bash 
+
           set -eou pipefail
 
-          bump_type="revision"
+          BUMP="revision"
 
-          # $1 pr number
+          # searches for a certain label in the pr which landed a commit
+          # $1 commit
           # $2 label
-          pr_has_label() {
+          commit_pr_has_label() {
             local pr_number
             local label
-            pr_number="$1"
+            commit="$1"
             label="$2"
-            if gh pr view "$pr_number" --json labels -q '.labels[].name' | grep "$label" > /dev/null 2>&1; then 
+            
+            if gh pr list -s merged -B master -S "$commit" --json labels -q '.[].labels[].name' | grep "$label" > /dev/null 2>&1; then 
               return 0
             fi
             return 1
           }
 
-          pr_number="$(git log -1 --oneline --merges | sed -n "s/^.*Merge pull request #\\s*\\([0-9]*\\).*$/\\1/p")"
+          last_commit="$(git log -1 --oneline | cut -d ' ' -f1 | xargs)"
 
-          if pr_has_label "$pr_number" "minor release"; then
-            bump_type="minor"
+          if commit_pr_has_label "$last_commit" "feature"; then
+            BUMP="minor"
           fi
 
-          if pr_has_label "$pr_number" "major release"; then
-            bump_type="major"
+          if commit_pr_has_label "$last_commit" "not backwards compatible"; then
+            BUMP="major"
           fi
 
       - name: Echo the value of inputs.bump_type
