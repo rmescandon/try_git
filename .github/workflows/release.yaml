@@ -39,7 +39,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           if [ -n "${{ inputs.bump_type }}" ]; then
-            echo "bump_type=${{ inputs.bump_type }}" >> $$GITHUB_OUTPUT
+            echo "bump_type=${{ inputs.bump_type }}" >> $GITHUB_OUTPUT
             exit 0
           fi
 
@@ -70,9 +70,9 @@ jobs:
             bump_type="major"
           fi
 
-          echo "bump_type=${bump_type}" >> $$GITHUB_OUTPUT
+          echo "bump_type=${bump_type}" >> $GITHUB_OUTPUT
 
       - name: Echo the value of inputs.bump_type
         run: |
-          echo "the input bump type: "${{ inputs.bump_type }}
-          echo "the calculated bump_type: "${{ steps.semver.outputs.bump_type }}
+          echo "the input bump type: ${{ inputs.bump_type }}"
+          echo "the calculated bump_type: ${{ steps.semver.outputs.bump_type }}"
