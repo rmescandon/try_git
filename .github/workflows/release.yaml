@@ -40,7 +40,7 @@ jobs:
         run: |
           if [ -n ${{ inputs.bump_type }} ]; then
             echo "bump_type=${{ inputs.bump_type }}" >> $$GITHUB_OUTPUT
-            return
+            exit 0
           fi
 
           bump_type="revision"
