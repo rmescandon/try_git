@@ -31,15 +31,17 @@ jobs:
     if: ${{ github.event.workflow_run == null || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
+      - name: Set env var with bump_type
+        run: |
+          echo "BUMP_TYPE=${{inputs.bump_type}}" >> $GITHUB_ENV
       - name: Checkout this repo
         uses: actions/checkout@v2
       - if: ${{ inputs.bump_type == '' }}
-        id: semver
         name: calculate the bump version, when not set as input, based on last pr labels
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          bump="revision"
+          bump_type="revision"
 
           # searches for a certain label in the pr which landed a commit
           # $1 commit
@@ -59,16 +61,16 @@ jobs:
           last_commit="$(git log -1 --oneline | cut -d ' ' -f1 | xargs)"
 
           if commit_pr_has_label "$last_commit" "feature"; then
-            bump="minor"
+            bump_type="minor"
           fi
 
           if commit_pr_has_label "$last_commit" "not backwards compatible"; then
-            bump="major"
+            bump_type="major"
           fi
 
-          echo ::set-output name=bump_type::${bump}
+          echo "BUMP_TYPE=${bump_type}" >> $GITHUB_ENV
 
       - name: Echo the value of inputs.bump_type
         run: |
           echo "the input bump type: "${{ inputs.bump_type }}
-          echo "the calculated bump_type: "${{ steps.semver.outputs.bump_type }}
+          echo "the calculated bump_type: "${{ env.GITHUB_ENV }}
