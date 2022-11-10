@@ -1,4 +1,4 @@
-name: prlint
+name: Valid Title Format
 
 on:
   pull_request:
