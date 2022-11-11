@@ -15,11 +15,28 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - name: Checkout this repo branch
         uses: actions/checkout@v2
-      - name: Checkout robertomier/prlint repo
-        uses: actions/checkout@v2
-        with:
-          repository: robertomier/prlint
-          token: ${{ secrets.CHECKOUT_TOKEN }}
-          path: .github/actions
-      - name: Pull request lint
-        uses: ./.github/actions
+
+      - name: Lint Title
+        run: |
+          if [[ "${{github.event.pull_request.title }}" =~ ^NOV-[0-9]{6}: ]]; then
+            echo "Title format is ok"
+          else
+            echo "Title does not have the proper format"
+            exit 1
+          fi
+
+      - name: See the proposer of the PR and what assignees have
+        if: ${{ github.event.pull_request.assignee == '' }}
+        run: |
+          echo "AUTHOR: ${{ github.event.pull_request.head.user.login }}"
+          echo "ASSIGNEE: ${{ github.event.pull_request.assignee }}"
+          gh pr edit ${{ github.event.pull_request.number }} --add-assignee "${{ github.event.pull_request.head.user.login }}"
+
+      # - name: Checkout robertomier/prlint repo
+      #   uses: actions/checkout@v2
+      #   with:
+      #     repository: robertomier/prlint
+      #     token: ${{ secrets.CHECKOUT_TOKEN }}
+      #     path: .github/actions
+      # - name: Pull request lint
+      #   uses: ./.github/actions
