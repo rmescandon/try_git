@@ -26,6 +26,7 @@ jobs:
           fi
 
       - name: See the proposer of the PR and what assignees have
+        if: ${{ github.event.pull_request.assignee == '' }}
         run: |
           echo "AUTHOR: ${{ github.event.pull_request.head.user.login }}"
           echo "ASSIGNEE: ${{ github.event.pull_request.assignee }}"
