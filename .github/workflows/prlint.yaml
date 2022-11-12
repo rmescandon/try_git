@@ -25,10 +25,8 @@ jobs:
             echo "Title format is ok"
             exit 0
           fi
-           
-          branch_name="${GITHUB_REF#refs/heads/}"
-          # branch_name="$(git rev-parse --abbrev-ref HEAD)"
-          if [[ "$branch_name" =~ ^(NOV-[0-9]{6})-(.*)$ ]]; then
+        
+          if [[ "$GITHUB_HEAD_REF" =~ ^(NOV-[0-9]{6})-(.*)$ ]]; then
             prefix=${BASH_REMATCH[1]}
             description=${BASH_REMATCH[2]}
             summary="$(echo $description | tr - ' ')"
