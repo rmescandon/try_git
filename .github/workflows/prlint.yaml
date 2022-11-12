@@ -21,17 +21,9 @@ jobs:
           set -x 
 
           # Validate pull request title format
-          validate_title_format() {
-            local title
-            title="${{ github.event.pull_request.title }}"
-            if [[ "$title" =~ ^NOV-[0-9]{6}:.*$ ]]; then
-              echo "Title format is ok"
-              return 0
-            fi
-            return 1
-          }
-
-          if validate_title_format; then
+          title="${{ github.event.pull_request.title }}"
+          if [[ "$title" =~ ^NOV-[0-9]{6}:.*$ ]]; then
+            echo "Title format is ok"
             exit 0
           fi
 
@@ -43,9 +35,6 @@ jobs:
             description=${BASH_REMATCH[2]}
             summary="$(echo $description | tr - ' ')"
             gh pr edit ${{ github.event.pull_request.number }} --title "$prefix: $summary"
-            if validate_title_format; then
-              exit 0
-            fi
           fi
 
           echo "Title does not have the proper format"
