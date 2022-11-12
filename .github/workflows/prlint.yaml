@@ -17,7 +17,6 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Lint Title
-        description: Validates title format. If not set, tries to update it baed on branch name
         run: |
           set -x 
 
