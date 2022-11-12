@@ -22,7 +22,8 @@ jobs:
           set -x 
 
           # Validate pull request title format
-          function validate_title_format() {
+          validate_title_format() {
+            local title
             title="${{ github.event.pull_request.title }}"
             if [[ "$title" =~ ^NOV-[0-9]{6}:.*$ ]]; then
               echo "Title format is ok"
