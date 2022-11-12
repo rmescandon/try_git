@@ -30,7 +30,7 @@ jobs:
             prefix=${BASH_REMATCH[1]}
             description=${BASH_REMATCH[2]}
             summary="$(echo $description | tr - ' ')"
-            gh pr edit --title "$prefix: $summary"
+            gh pr edit ${{ github.event.pull_request.number }} --title "$prefix: $summary"
             exit 0
           fi
 
