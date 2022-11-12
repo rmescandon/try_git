@@ -18,6 +18,8 @@ jobs:
 
       - name: Lint Title
         run: |
+          set -x 
+          
           title="${{ github.event.pull_request.title }}"
           if [[ "$title" =~ ^NOV-[0-9]{6}:.*$ ]]; then
             echo "Title format is ok"
