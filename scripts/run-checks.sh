@@ -17,3 +17,4 @@ done
 # Ignore E501 line too long and skip tests and 
 # virtual environment folders
 (cd "$(dirname "$0")" && flake8 . --exclude=venv,tests --ignore E501)
+
